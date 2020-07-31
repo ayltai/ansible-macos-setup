@@ -1,0 +1,66 @@
+---
+- block:
+  - name: checks if Hack fonts are installed
+    stat:
+      path: "{{ ansible_env.HOME }}/Library/Fonts/Hack-Regular.ttf"
+    register: hack_fonts
+
+  - block:
+    - name: downloads Hack fonts
+      get_url:
+        url: "{{ macos_hack_fonts_url }}"
+        dest: "{{ macos_download_path }}"
+
+    - name: decompresses Hack fonts
+      unarchive:
+        src: "{{ macos_download_path }}/{{ macos_hack_fonts_package }}"
+        dest: "{{ macos_download_path }}"
+
+    - name: installs Hack fonts
+      copy:
+        src: "{{ macos_download_path }}/ttf/{{ item }}"
+        dest: "{{ ansible_env.HOME }}/Library/Fonts/{{ item }}"
+        remote_src: yes
+      with_items:
+        - Hack-Bold.ttf
+        - Hack-BoldItalic.ttf
+        - Hack-Italic.ttf
+        - Hack-Regular.ttf
+
+    - name: deletes Hack fonts installation packages
+      file:
+        path: "{{ itme }}"
+        state: absent
+        remote_src: yes
+      with_items:
+        - "{{ macos_download_path }}/{{ macos_hack_fonts_package }}"
+        - "{{ macos_download_path }}/ttf"
+    when: macos_overwrite or not hack_fonts.stat.exists
+  when: macos_hack_fonts
+
+- block:
+  - name: checks if Resizer is installed
+    stat:
+      path: "{{ ansible_env.HOME }}/Library/Services/Resize.workflow"
+    register: resizer
+
+  - block:
+    - name: git clones Resizer
+      git:
+        repo: https://github.com/ayltai/Resizer.git
+        dest: "{{ macos_download_path }}/Resizer"
+        version: master
+
+    - name: installs Resizer
+      command: ./install.command
+      args:
+        chdir: "{{ macos_download_path }}/Resizer"
+        creates: "{{ ansible_env.HOME }}/Library/Services/Resize.workflow"
+
+    - name: deletes Resizer installation package
+      file:
+        path: "{{ macos_download_path }}/Resizer"
+        state: absent
+        remote_src: yes
+    when: macos_overwrite or not resizer.stat.exists
+  when: macos_resizer

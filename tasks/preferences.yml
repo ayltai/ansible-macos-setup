@@ -1,0 +1,65 @@
+---
+- name: sets email address for Git
+  git_config:
+    name: user.email
+    value: "{{ git_user_email }}"
+  when: git_user_email is defined
+
+- name: sets user name for Git
+  git_config:
+    name: user.name
+    value: "{{ git_user_name }}"
+  when: git_user_name is defined
+
+- name: adds environment variables to Bash profile
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.bash_profile"
+    block: |
+      alias ll='ls -la'
+
+      export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
+      export JAVA_11_HOME=$(/usr/libexec/java_home -v11)
+      export JAVA_14_HOME=$(/usr/libexec/java_home -v14)
+      export GRAALVM_8_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java8-20.1.0/Contents/Home
+      export GRAALVM_11_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-20.1.0/Contents/Home
+
+      alias java8='export JAVA_HOME=$JAVA_8_HOME'
+      alias java11='export JAVA_HOME=$JAVA_11_HOME'
+      alias java14='export JAVA_HOME=$JAVA_14_HOME'
+      alias graalvm8='export JAVA_HOME=$GRAALVM_8_HOME; PATH=$GRAALVM_8_HOME/bin:$PATH'
+      alias graalvm11='export JAVA_HOME=$GRAALVM_11_HOME; PATH=$GRAALVM_11_HOME/bin:$PATH'
+
+      # Default to Java 8
+      {{ macos_java_default }}
+
+      # Colors
+      C_DEFAULT="\[\033[m\]"
+      C_WHITE="\[\033[1m\]"
+      C_BLACK="\[\033[30m\]"
+      C_RED="\[\033[31m\]"
+      C_GREEN="\[\033[32m\]"
+      C_YELLOW="\[\033[33m\]"
+      C_BLUE="\[\033[34m\]"
+      C_PURPLE="\[\033[35m\]"
+      C_CYAN="\[\033[36m\]"
+      C_LIGHTGRAY="\[\033[37m\]"
+      C_DARKGRAY="\[\033[1;30m\]"
+      C_LIGHTRED="\[\033[1;31m\]"
+      C_LIGHTGREEN="\[\033[1;32m\]"
+      C_LIGHTYELLOW="\[\033[1;33m\]"
+      C_LIGHTBLUE="\[\033[1;34m\]"
+      C_LIGHTPURPLE="\[\033[1;35m\]"
+      C_LIGHTCYAN="\[\033[1;36m\]"
+      C_BG_BLACK="\[\033[40m\]"
+      C_BG_RED="\[\033[41m\]"
+      C_BG_GREEN="\[\033[42m\]"
+      C_BG_YELLOW="\[\033[43m\]"
+      C_BG_BLUE="\[\033[44m\]"
+      C_BG_PURPLE="\[\033[45m\]"
+      C_BG_CYAN="\[\033[46m\]"
+      C_BG_LIGHTGRAY="\[\033[47m\]"
+
+      export CLICOLOR=1
+      export LSCOLORS=GxFxCxDxBxegedabagaced
+      export PS1="\n$C_LIGHTGREEN\u$C_LIGHTGRAY@$C_LIGHTCYAN\h $C_LIGHTGRAY: $C_LIGHTYELLOW\w\n$C_LIGHTGRAY\$$C_DEFAULT"
+    create: yes

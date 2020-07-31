@@ -1,0 +1,23 @@
+- name: checks if AdoptOpenJDK is installed
+  stat:
+    path: "/Library/Java/JavaVirtualMachines/{{ item.name }}.jdk"
+  register: java
+
+- block:
+  - name: downloads AdoptOpenJDK
+    get_url:
+      url: "{{ item.url }}"
+      dest: "{{ macos_download_path }}"
+      checksum: "{{ item.checksum }}"
+
+  - name: installs AdoptOpenJDK
+    become: yes
+    command: "installer -pkg {{ macos_download_path }}/{{ item.package }} -target /"
+    args:
+      creates: "/Library/Java/JavaVirtualMachines/{{ item.name }}"
+
+  - name: deletes AdoptOpenJDK installation package
+    file:
+      path: "{{ macos_download_path }}/{{ item.package }}"
+      state: absent
+  when: macos_overwrite or not java.stat.exists

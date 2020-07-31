@@ -1,0 +1,24 @@
+---
+- name: checks if the archived package is installed
+  stat:
+    path: "/Applications/{{ item.name }}.app"
+  register: archived_package
+
+- block:
+  - name: downloads the archived package
+    get_url:
+      url: "{{ item.url }"
+      dest: "{{ macos_download_path }}/{{ item.name }}"
+
+  - name: installs the archived package
+    unarchive:
+      src: "{{ macos_download_path }}/{{ item.name }}"
+      dest: /Applications
+      remote_src: yes
+
+  - name: deletes the installation package
+    file:
+      path: "{{ macos_download_path }}/{{ item.name }}"
+      state: absent
+      remote_src: yes
+  when: macos_overwrite or not archived_package.stat.exists

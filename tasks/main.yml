@@ -1,0 +1,29 @@
+---
+- include_tasks: preflight.yml
+
+- name: applies macOS customizations
+  include_role:
+    name: ayltai.macos_preferences
+
+- name: installs applications with App Store
+  include_role:
+    name: ayltai.macos_appstore
+
+- include_tasks: homebrew.yml
+
+- name: installs Visual Studio Code and extensions
+  include_role:
+    name: ayltai.vscode_mac
+  when: macos_vscode
+
+- include_tasks: archived-packages.yml
+  loop: "{{ macos_archived_packages }}"
+
+- include_tasks: java-packages.yml
+  loop: "{{ macos_java_packages }}"
+
+- include_tasks: graalvm-packages.yml
+  loop: "{{ macos_graalvm_packages }}"
+
+- include_tasks: open-source-packages.yml
+- include_tasks: preferences.yml

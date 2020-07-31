@@ -1,0 +1,37 @@
+---
+- name: checks if GraalVM JDK is installed
+  stat:
+    path: "/Library/Java/JavaVirtualMachines/{{ item.name }}"
+  register: graalvm
+
+- block:
+  - name: downloads GraalVM JDK
+    get_url:
+      url: "{{ item.url }}"
+      dest: "{{ macos_download_path }}"
+
+  - name: decompresses GraalVM JDK
+    unarchive:
+      src: "{{ macos_download_path }}/{{ item.package }}"
+      dest: "{{ macos_download_path }}"
+      remote_src: yes
+
+  - name: installs GraalVM JDK
+    become: yes
+    copy:
+      src: "{{ macos_download_path }}/{{ item.name }}"
+      dest: /Library/Java/JavaVirtualMachines
+      remote_src: yes
+
+  - name: deletes GraalVM JDK archived packages
+    file:
+      path: "{{ macos_download_path }}/{{ item.package }}"
+      state: absent
+      remote_src: yes
+
+  - name: deletes GraalVM JDK installation packages
+    file:
+      path: "{{ macos_download_path }}/{{ item.name }}"
+      state: absent
+      remote_src: yes
+  when: macos_overwrite or not graalvm.stat.exists

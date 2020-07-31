@@ -1,0 +1,3 @@
+---
+macos_hack_fonts_package: Hack-v3.003-ttf.zip
+macos_hack_fonts_url: "https://github.com/source-foundry/Hack/releases/download/v3.003/{{ macos_hack_fonts_package }}"

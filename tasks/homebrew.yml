@@ -1,0 +1,11 @@
+---
+- name: installs packages with Homebrew
+  homebrew:
+    name: "{{ macos_homebrew_packages }}"
+    update_homebrew: yes
+    upgrade_all: yes
+
+- name: installs packages with Homebrew Cask
+  homebrew_cask:
+    name: "{{ macos_homebrew_cask_packages }}"
+    sudo_password: "{{ sudo_password }}"
