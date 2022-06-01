@@ -17,17 +17,6 @@
     block: |
       alias ll='ls -la'
 
-      export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
-      export JAVA_11_HOME=$(/usr/libexec/java_home -v11)
-      export JAVA_18_HOME=$(/usr/libexec/java_home -v18)
-
-      alias java8='export JAVA_HOME=$JAVA_8_HOME'
-      alias java11='export JAVA_HOME=$JAVA_11_HOME'
-      alias java18='export JAVA_HOME=$JAVA_18_HOME'
-
-      # Default Java version
-      {{ macos_java_default }}
-
       # Colors
       C_DEFAULT="\[\033[m\]"
       C_WHITE="\[\033[1m\]"

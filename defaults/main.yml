@@ -5,8 +5,6 @@ macos_vscode: yes
 macos_homebrew_packages: []
 macos_homebrew_cask_packages: []
 macos_archived_packages: []
-macos_java_packages: []
 macos_graalvm_packages: []
 macos_hack_fonts: yes
 macos_resizer: yes
-macos_java_default: java18

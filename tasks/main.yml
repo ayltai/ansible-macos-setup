@@ -19,8 +19,5 @@
 - include_tasks: archived-packages.yml
   loop: "{{ macos_archived_packages }}"
 
-- include_tasks: java-packages.yml
-  loop: "{{ macos_java_packages }}"
-
 - include_tasks: open-source-packages.yml
 - include_tasks: preferences.yml
