@@ -1,9 +1,9 @@
 ---
 - name: ayltai.macos_preferences
-  version: 1.0.0
+  version: 1.1.0
 
 - name: ayltai.macos_appstore
-  version: 1.0.0
+  version: 1.0.1
 
 - name: ayltai.vscode_mac
-  version: 1.0.0
+  version: 2.0.0

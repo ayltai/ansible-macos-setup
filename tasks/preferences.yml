@@ -12,24 +12,20 @@
   when: git_user_name is defined
 
 - name: adds environment variables to Bash profile
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: "{{ ansible_env.HOME }}/.bash_profile"
     block: |
       alias ll='ls -la'
 
       export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
       export JAVA_11_HOME=$(/usr/libexec/java_home -v11)
-      export JAVA_14_HOME=$(/usr/libexec/java_home -v14)
-      export GRAALVM_8_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java8-20.1.0/Contents/Home
-      export GRAALVM_11_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-20.1.0/Contents/Home
+      export JAVA_18_HOME=$(/usr/libexec/java_home -v18)
 
       alias java8='export JAVA_HOME=$JAVA_8_HOME'
       alias java11='export JAVA_HOME=$JAVA_11_HOME'
-      alias java14='export JAVA_HOME=$JAVA_14_HOME'
-      alias graalvm8='export JAVA_HOME=$GRAALVM_8_HOME; PATH=$GRAALVM_8_HOME/bin:$PATH'
-      alias graalvm11='export JAVA_HOME=$GRAALVM_11_HOME; PATH=$GRAALVM_11_HOME/bin:$PATH'
+      alias java18='export JAVA_HOME=$JAVA_18_HOME'
 
-      # Default to Java 8
+      # Default Java version
       {{ macos_java_default }}
 
       # Colors
@@ -61,5 +57,10 @@
 
       export CLICOLOR=1
       export LSCOLORS=GxFxCxDxBxegedabagaced
-      export PS1="\n$C_LIGHTGREEN\u$C_LIGHTGRAY@$C_LIGHTCYAN\h $C_LIGHTGRAY: $C_LIGHTYELLOW\w\n$C_LIGHTGRAY\$$C_DEFAULT"
+
+      parse_git_branch() {
+          git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+      }
+
+      export PS1="\n$C_LIGHTGRAY\D{%F %T} $C_LIGHTGREEN\u$C_LIGHTGRAY@$C_LIGHTCYAN\h $C_LIGHTGRAY: $C_LIGHTYELLOW\w $C_LIGHTRED\$(parse_git_branch)\[\e[00m\]\n$C_LIGHTGRAY\$$C_DEFAULT"
     create: yes

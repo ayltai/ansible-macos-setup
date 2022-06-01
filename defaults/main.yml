@@ -9,4 +9,4 @@ macos_java_packages: []
 macos_graalvm_packages: []
 macos_hack_fonts: yes
 macos_resizer: yes
-macos_java_default: java8
+macos_java_default: java18

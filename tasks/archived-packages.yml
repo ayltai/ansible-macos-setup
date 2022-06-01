@@ -1,23 +1,24 @@
 ---
 - name: checks if the archived package is installed
-  stat:
+  ansible.builtin.stat:
     path: "/Applications/{{ item.name }}.app"
   register: archived_package
 
-- block:
+- name: overwrites archived packages
+  block:
   - name: downloads the archived package
-    get_url:
+    ansible.builtin.get_url:
       url: "{{ item.url }"
       dest: "{{ macos_download_path }}/{{ item.name }}"
 
   - name: installs the archived package
-    unarchive:
+    ansible.builtin.unarchive:
       src: "{{ macos_download_path }}/{{ item.name }}"
       dest: /Applications
       remote_src: yes
 
   - name: deletes the installation package
-    file:
+    ansible.builtin.file:
       path: "{{ macos_download_path }}/{{ item.name }}"
       state: absent
       remote_src: yes

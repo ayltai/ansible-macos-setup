@@ -1,23 +1,25 @@
 ---
-- block:
+- name: installs Hack fonts
+  block:
   - name: checks if Hack fonts are installed
-    stat:
+    ansible.builtin.stat:
       path: "{{ ansible_env.HOME }}/Library/Fonts/Hack-Regular.ttf"
     register: hack_fonts
 
-  - block:
+  - name: overwrites Hack fonts
+    block:
     - name: downloads Hack fonts
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ macos_hack_fonts_url }}"
         dest: "{{ macos_download_path }}"
 
     - name: decompresses Hack fonts
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{ macos_download_path }}/{{ macos_hack_fonts_package }}"
         dest: "{{ macos_download_path }}"
 
     - name: installs Hack fonts
-      copy:
+      ansible.builtin.copy:
         src: "{{ macos_download_path }}/ttf/{{ item }}"
         dest: "{{ ansible_env.HOME }}/Library/Fonts/{{ item }}"
         remote_src: yes
@@ -28,7 +30,7 @@
         - Hack-Regular.ttf
 
     - name: deletes Hack fonts installation packages
-      file:
+      ansible.builtin.file:
         path: "{{ itme }}"
         state: absent
         remote_src: yes
@@ -38,27 +40,29 @@
     when: macos_overwrite or not hack_fonts.stat.exists
   when: macos_hack_fonts
 
-- block:
+- name: installs Resizer
+  block:
   - name: checks if Resizer is installed
-    stat:
+    ansible.builtin.stat:
       path: "{{ ansible_env.HOME }}/Library/Services/Resize.workflow"
     register: resizer
 
-  - block:
+  - name: overwrites Resizer
+    block:
     - name: git clones Resizer
-      git:
+      ansible.builtin.git:
         repo: https://github.com/ayltai/Resizer.git
         dest: "{{ macos_download_path }}/Resizer"
         version: master
 
     - name: installs Resizer
-      command: ./install.command
+      ansible.builtin.command: ./install.command
       args:
         chdir: "{{ macos_download_path }}/Resizer"
         creates: "{{ ansible_env.HOME }}/Library/Services/Resize.workflow"
 
     - name: deletes Resizer installation package
-      file:
+      ansible.builtin.file:
         path: "{{ macos_download_path }}/Resizer"
         state: absent
         remote_src: yes

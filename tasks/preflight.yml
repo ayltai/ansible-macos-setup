@@ -1,12 +1,12 @@
 ---
 - name: gets username
-  command: whoami
+  ansible.builtin.command: whoami
   changed_when: no
   register: username
 
 - name: enables passwordless sudoers
   become: yes
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/sudoers
     line: "{{ username.stdout }} ALL=(root) NOPASSWD: /usr/sbin/installer, /usr/bin/chsh"
     validate: /usr/sbin/visudo -cf %s

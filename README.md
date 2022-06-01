@@ -3,7 +3,7 @@
 [![GitHub workflow status](https://img.shields.io/github/workflow/status/ayltai/ansible-macos-setup/CI?style=flat)](https://github.com/ayltai/ansible-macos-setup/actions)
 [![Ansible quality score](https://img.shields.io/badge/quality-5-success)](https://galaxy.ansible.com/ayltai/macos_setup)
 [![Ansible role](https://img.shields.io/badge/role-ayltai.macos_setup-blue)](https://galaxy.ansible.com/ayltai/macos_setup)
-![Maintenance](https://img.shields.io/maintenance/yes/2020?style=flat)
+![Maintenance](https://img.shields.io/maintenance/yes/2022?style=flat)
 [![Release](https://img.shields.io/github/release/ayltai/ansible-macos-setup.svg?style=flat)](https://github.com/ayltai/ansible-macos-setup/releases)
 [![License](https://img.shields.io/github/license/ayltai/ansible-macos-setup.svg?style=flat)](https://github.com/ayltai/ansible-macos-setup/blob/master/LICENSE)
 
