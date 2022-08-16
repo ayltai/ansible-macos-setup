@@ -8,7 +8,7 @@
   block:
   - name: downloads the archived package
     ansible.builtin.get_url:
-      url: "{{ item.url }"
+      url: "{{ item.url }}"
       dest: "{{ macos_download_path }}/{{ item.name }}"
 
   - name: installs the archived package
