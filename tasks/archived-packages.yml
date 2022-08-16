@@ -21,5 +21,4 @@
     ansible.builtin.file:
       path: "{{ macos_download_path }}/{{ item.name }}"
       state: absent
-      remote_src: yes
   when: macos_overwrite or not archived_package.stat.exists
