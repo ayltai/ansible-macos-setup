@@ -31,7 +31,7 @@
 
     - name: deletes Hack fonts installation packages
       ansible.builtin.file:
-        path: "{{ itme }}"
+        path: "{{ item }}"
         state: absent
         remote_src: yes
       with_items:
