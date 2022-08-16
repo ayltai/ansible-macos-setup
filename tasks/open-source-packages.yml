@@ -65,6 +65,5 @@
       ansible.builtin.file:
         path: "{{ macos_download_path }}/Resizer"
         state: absent
-        remote_src: yes
     when: macos_overwrite or not resizer.stat.exists
   when: macos_resizer
